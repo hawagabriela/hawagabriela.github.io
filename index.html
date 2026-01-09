@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Let's see if you know Jana!</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    button { margin: 5px; padding: 8px 15px; font-size: 16px; }
+    input { padding: 5px; font-size: 16px; width: 200px; }
+    #quiz p { font-size: 18px; }
+    #feedback { font-weight: bold; margin-top: 10px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>Try to answer 15 questions about Jana and check if you really know her!</h1>
+  <p>Take this quiz and see how well you know her!</p>
+
+  <div id="quiz"></div>
+  <div id="feedback"></div>
+  <button id="nextBtn" style="display:none;">Next Question</button>
+
+  <p id="result" style="font-weight:bold; margin-top:20px;"></p>
+
+  <script>
+    const questions = [
+      { q: "1️⃣ What is Jana's favorite color?", a: "Yellow", options: ["Black", "Yellow", "Blue"] },
+      { q: "2️⃣ What accessory does Jana like the most?", a: "Scrunchie", options: ["Bracelet", "Hat", "Scrunchie"] },
+      { q: "3️⃣ What is Jana's favorite hobby?", a: "Dancing", options: ["Table Tennis", "Watch Kdramas", "Dancing"] },
+      { q: "4️⃣ How many siblings does Jana have?", a: "3", options: ["6", "7", "3"] },
+      { q: "5️⃣ When is Jana's birthday?", a: "March 28", options: ["March 30", "March 29", "March 28"] },
+      { q: "6️⃣ What makes Jana get awkward most?", a: "I love you words", options: ["makipaghug", "I love you words", "katung roast ni RJ sa ako"] },
+      { q: "7️⃣ How tall is Jana?", a: "160cm", options: ["167cm", "160cm", "176cm"] },
+      { q: "8️⃣ What is Jana's favorite K-pop group currently?", a: "CORTIS", options: ["CORTIS", "BTS", "BLACKPINK"] },
+      { q: "9️⃣ What is Jana's favorite jersey number?", a: "28", options: ["11", "76", "28"] },
+      { q: "1️⃣0️⃣ What is Jana's favorite subject?", a: "Math", options: ["Science", "Math", "English"] },
+      { q: "1️⃣1️⃣ Jana's favorite CORTIS song to dance to?", a: "GOKGOKGOK by Cortis and FaSHioN by Cortis" },
+      { q: "1️⃣2️⃣ Jana's second name", a: "Andrea" },
+      { q: "1️⃣3️⃣ Muadto si Jana sa Korea for ______", a: "Cortis hunting" },
+      { q: "1️⃣4️⃣ Jana's favorite day (e.g. Wednesday, Friday, Monday) of the school week", a: "Wednesday" },
+      { q: "1️⃣5️⃣ Jana's most unfavorite day (e.g. Wednesday, Friday, Monday) of the school week", a: "Monday" }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const quizDiv = document.getElementById("quiz");
+      const feedbackDiv = document.getElementById("feedback");
+      const nextBtn = document.getElementById("nextBtn");
+
+      quizDiv.innerHTML = "";
+      feedbackDiv.innerHTML = "";
+      nextBtn.style.display = "none";
+
+      if(currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+        const questionText = document.createElement("p");
+        questionText.textContent = q.q;
+        quizDiv.appendChild(questionText);
+
+        if(q.options) {
+          q.options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.textContent = option;
+            btn.onclick = () => checkAnswer(option);
+            quizDiv.appendChild(btn);
+          });
+        } else {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.id = "answerInput";
+          quizDiv.appendChild(input);
+
+          const btn = document.createElement("button");
+          btn.textContent = "Submit";
+          btn.onclick = () => checkAnswer(document.getElementById("answerInput").value);
+          quizDiv.appendChild(btn);
+        }
+      } else {
+        quizDiv.innerHTML = "<h2>🎉 Quiz Finished!</h2>";
+        document.getElementById("result").textContent = `Your final score: ${score}/${questions.length}`;
+      }
+    }
+
+    function checkAnswer(answer) {
+      const feedbackDiv = document.getElementById("feedback");
+      const nextBtn = document.getElementById("nextBtn");
+      const correctAnswer = questions[currentQuestion].a;
+
+      if(answer.trim().toLowerCase() === correctAnswer.toLowerCase()) {
+        score++;
+        feedbackDiv.innerHTML = "✅ Correct!";
+      } else {
+        feedbackDiv.innerHTML = `❌ Oops! The correct answer is: <strong>${correctAnswer}</strong>`;
+      }
+
+      // Hide buttons/input and show Next button
+      Array.from(document.querySelectorAll("#quiz button")).forEach(btn => btn.disabled = true);
+      const inputField = document.getElementById("answerInput");
+      if(inputField) inputField.disabled = true;
+
+      nextBtn.style.display = "inline-block";
+      nextBtn.onclick = () => {
+        currentQuestion++;
+        showQuestion();
+      };
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
